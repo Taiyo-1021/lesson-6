@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nasal &amp; Approximant Consonants — English Pronunciation Lesson</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#001517;overflow:hidden;height:100vh;width:100vw}
+#app{width:100vw;height:100vh;display:flex;flex-direction:column}
+#progress{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,#26c6da,#80cbc4);z-index:99;transition:width .3s ease;border-radius:0 3px 3px 0}
+#slides{flex:1;position:relative;overflow:hidden;min-height:0}
+.slide{position:absolute;inset:0;display:none;flex-direction:column}
+.slide.active{display:flex}
+
+/* NAV */
+#nav{height:48px;background:#000d0e;display:flex;align-items:center;justify-content:center;gap:14px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
+#nav button{background:rgba(255,255,255,.1);border:none;color:#fff;font-size:13px;padding:6px 20px;border-radius:20px;cursor:pointer;transition:background .2s;font-family:inherit;letter-spacing:.3px}
+#nav button:hover{background:rgba(255,255,255,.22)}
+#nav button:disabled{opacity:.25;cursor:default}
+#counter{color:rgba(255,255,255,.45);font-size:12px;min-width:60px;text-align:center}
+
+/* SHARED */
+.s-head{padding:12px 30px;font-size:16px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0;letter-spacing:.2px}
+.badge{background:rgba(255,255,255,.16);border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600}
+.s-body{flex:1;display:flex;padding:0 26px 12px;gap:22px;min-height:0;overflow:hidden}
+.label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;opacity:.5;margin-bottom:6px}
+
+/* ── TITLE ── */
+.title-slide{background:linear-gradient(140deg,#001517 0%,#00363d 55%,#001517 100%);align-items:center;justify-content:center;text-align:center}
+.title-slide h1{font-size:clamp(40px,7.5vw,88px);font-weight:900;color:#fff;line-height:1;letter-spacing:-2px}
+.title-slide h1 em{font-style:normal;background:linear-gradient(90deg,#26c6da,#80cbc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.title-sub{font-size:clamp(14px,1.9vw,21px);color:rgba(255,255,255,.6);margin-top:12px}
+.goal-box{margin-top:24px;background:rgba(38,198,218,.09);border:1.5px solid rgba(38,198,218,.28);border-radius:16px;padding:16px 28px;display:inline-block;text-align:left}
+.goal-box p{color:#b2ebf2;font-size:clamp(13px,1.5vw,17px);line-height:1.75}
+.sym-strip{display:flex;gap:10px;margin-top:26px;justify-content:center;flex-wrap:wrap}
+.sym-strip .sc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:9px 15px;font-size:clamp(16px,2.6vw,28px);color:#26c6da;font-weight:800}
+
+/* ── OVERVIEW ── */
+.ov-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:11px;width:100%;max-width:980px}
+.ov-card{border-radius:13px;padding:13px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.09);transition:transform .18s}
+.ov-card:hover{transform:translateY(-3px)}
+.ov-sym{font-size:clamp(24px,3.8vw,48px);font-weight:900;line-height:1}
+.ov-disp{font-size:clamp(9px,1vw,13px);font-weight:700;opacity:.7}
+.ov-name{font-size:clamp(7px,.85vw,10px);opacity:.55;line-height:1.3;text-align:center}
+.ov-word{font-size:clamp(9px,1vw,12px);font-style:italic;font-weight:600}
+
+/* ── FEATURE BOX ── */
+.feat-box{background:#e0f7fa;border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:14px;border:1.5px solid #26c6da30;flex-wrap:wrap}
+.feat-item{text-align:center;min-width:80px}
+.feat-item .fv{font-size:clamp(12px,1.4vw,16px);font-weight:800}
+.feat-item .fl{font-size:9px;text-transform:uppercase;letter-spacing:1px;opacity:.5;margin-top:2px}
+.feat-throat{font-size:clamp(10px,1.15vw,13px);color:#555;line-height:1.55;flex:1;min-width:160px}
+.feat-throat strong{color:#00838f}
+
+/* ── EXPLAIN ── */
+.explain-slide{background:#fff;flex-direction:column}
+.ex-left{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;width:240px;flex-shrink:0;padding:4px 0}
+.big-sym{font-size:clamp(68px,11vw,128px);font-weight:900;line-height:1;text-align:center}
+.mouth-wrap{background:#f9f9f9;border-radius:13px;padding:7px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.lip-lbl{font-size:10px;color:#888;text-align:center;line-height:1.6}
+.ex-right{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;padding:4px 0;min-height:0;gap:7px}
+.desc-card{border-radius:12px;padding:11px 15px}
+.desc-card p{font-size:clamp(12px,1.4vw,15px);line-height:1.55;color:#1a2a3a;font-weight:500}
+.howto{list-style:none;margin-top:5px;display:flex;flex-direction:column;gap:3px}
+.howto li{font-size:clamp(11px,1.25vw,13px);padding-left:16px;position:relative;color:#2a3a4a;line-height:1.4}
+.howto li::before{content:'→';position:absolute;left:0;opacity:.4;font-size:11px}
+.tip-box{border-radius:12px;padding:11px 15px;display:flex;gap:9px;align-items:flex-start;background:#e0f7fa;border-left:4px solid #00acc1}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.tip-text{font-size:clamp(11px,1.3vw,14px);line-height:1.5;font-weight:500;color:#00363a}
+.ex-words{display:flex;gap:7px;flex-wrap:wrap}
+.ex-chip{border-radius:10px;padding:8px 11px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:66px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.ex-chip .ew{font-size:clamp(13px,1.8vw,19px);font-weight:700}
+.ex-chip .ei{font-size:clamp(9px,.95vw,11px);opacity:.55}
+.ctx{border-radius:9px;padding:8px 13px;font-size:clamp(10px,1.1vw,12px);color:#555}
+
+/* ── DRILL ── */
+.drill-slide{background:#e0f7fa;flex-direction:column}
+.dr-left{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:200px;flex-shrink:0}
+.dr-sym{font-size:clamp(58px,9.5vw,108px);font-weight:900;line-height:1;text-align:center}
+.dr-right{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:2px 0;min-height:0}
+.repeat-instr{border-radius:12px;padding:11px 16px;margin-bottom:10px}
+.repeat-instr .ri-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.repeat-instr .ri-flow{display:flex;align-items:center;gap:10px;font-size:clamp(13px,1.6vw,17px);font-weight:600;flex-wrap:wrap}
+.ri-step{border-radius:8px;padding:5px 12px;white-space:nowrap}
+.ri-arrow{font-size:18px;opacity:.35}
+.word-rows{display:flex;flex-direction:column;gap:8px}
+.wr{display:flex;align-items:center;gap:12px;background:#fff;border-radius:11px;padding:10px 16px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.wr-n{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.wr-w{font-size:clamp(16px,2.5vw,28px);font-weight:700;flex:1}
+.wr-p{font-size:clamp(10px,1.2vw,14px);opacity:.45}
+.mp-box{border-radius:12px;padding:12px 16px}
+.mp-box .label{margin-bottom:8px}
+.mp-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.mp-item{text-align:center}
+.mp-sym{font-size:clamp(11px,1.2vw,14px);font-weight:700;opacity:.6;margin-bottom:2px}
+.mp-word{font-size:clamp(17px,2.7vw,30px);font-weight:800}
+.mp-vs{font-size:16px;opacity:.25;font-weight:900}
+.mp-note{font-size:clamp(11px,1.2vw,14px);color:#555;align-self:center;max-width:220px;line-height:1.5}
+
+/* ── STUDENT DRILL ── */
+.stdrill-slide{background:#e0f7fa;flex-direction:column}
+.sd-instr{background:#fff;border-radius:13px;padding:13px 18px;border-left:5px solid #00acc1;flex-shrink:0}
+.sd-instr h2{font-size:clamp(14px,1.7vw,19px);color:#00363a;margin-bottom:7px}
+.flow-steps{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.fs{display:flex;align-items:flex-start;gap:7px;font-size:clamp(11px,1.25vw,14px);line-height:1.45;flex:1;min-width:160px}
+.fs-n{background:#00acc1;color:#fff;border-radius:50%;width:21px;height:21px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.word-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px}
+.wg{background:#fff;border-radius:12px;padding:13px 7px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.wg-w{font-size:clamp(18px,2.8vw,34px);font-weight:800}
+.wg-sym{font-size:clamp(10px,1.1vw,13px);font-weight:600;margin-top:3px}
+
+/* ── FEEDBACK ── */
+.fb-slide{background:#e0f7fa;flex-direction:column}
+.fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.fb-card{background:#fff;border-radius:13px;padding:14px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.fb-card h3{font-size:clamp(12px,1.4vw,15px);font-weight:700;margin-bottom:10px}
+.fb-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.fb-list li{font-size:clamp(11px,1.25vw,14px);line-height:1.45;padding-left:16px;position:relative;color:#2a2a3a}
+.fb-list li::before{content:'•';position:absolute;left:0;font-weight:700}
+.fb-pair{display:inline-block;background:#e0f7fa;border-radius:6px;padding:2px 8px;font-weight:700;font-size:.95em;margin:0 2px}
+
+/* ── QUIZ Q ── */
+.quizq-slide{background:#fffbf2;flex-direction:column}
+.q-grid{display:flex;flex-direction:column;gap:12px;width:100%}
+.q-box{background:#fff;border-radius:13px;padding:15px 20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;opacity:.4;margin-bottom:5px}
+.q-text{font-size:clamp(13px,1.6vw,18px);font-weight:600;margin-bottom:11px;line-height:1.4;color:#1a1a2e}
+.q-opts{display:flex;gap:8px;flex-wrap:wrap}
+.q-opt{border-radius:8px;padding:7px 16px;font-size:clamp(12px,1.5vw,16px);font-weight:700;border:2px solid #ddd;background:#f7f7f7;color:#333;cursor:default}
+.think-banner{background:rgba(0,172,193,.1);border:1.5px solid rgba(0,172,193,.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:clamp(13px,1.5vw,17px);color:#00363a;font-weight:600;flex-shrink:0}
+
+/* ── QUIZ A ── */
+.quiza-slide{background:#f0fff4;flex-direction:column}
+.qa-box{background:#fff;border-radius:13px;padding:15px 20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.qa-opt{border-radius:8px;padding:7px 16px;font-size:clamp(12px,1.5vw,16px);font-weight:700;border:2px solid #ddd;background:#f7f7f7;color:#999;cursor:default}
+.qa-opt.correct{background:#e8f5e9;border-color:#2e7d52;color:#1a5c35}
+.qa-opt.correct::after{content:' ✓';font-weight:900}
+.qa-hint{font-size:clamp(10px,1.15vw,13px);color:#2e7d52;margin-top:7px;font-weight:500;line-height:1.5}
+
+/* ── SUMMARY ── */
+.summary-slide{background:linear-gradient(140deg,#001517 0%,#00363d 100%);flex-direction:column}
+.sum-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:11px;padding:10px 26px;width:100%}
+.sum-card{border-radius:13px;padding:13px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(0,0,0,.22);transition:transform .18s}
+.sum-card:hover{transform:translateY(-3px)}
+.sc-sym{font-size:clamp(24px,4vw,52px);font-weight:900;color:#fff}
+.sc-disp{font-size:clamp(9px,1vw,12px);color:rgba(255,255,255,.5);font-weight:600}
+.sc-ws{font-size:clamp(8px,.9vw,11px);color:rgba(255,255,255,.38);font-style:italic;line-height:1.6}
+.sum-foot{text-align:center;color:rgba(255,255,255,.6);font-size:clamp(12px,1.35vw,16px);padding:8px 26px 4px}
+.sum-foot strong{color:#80cbc4}
+.nxt-box{background:rgba(255,255,255,.06);border-radius:12px;padding:11px 22px;margin-top:10px;display:inline-block}
+.nxt-box p{color:rgba(255,255,255,.5);font-size:clamp(11px,1.2vw,14px);line-height:1.6}
+.nxt-box strong{color:#26c6da}
+
+/* ── FREE CONVERSATION ── */
+.freeconv-slide{background:linear-gradient(140deg,#1a1200 0%,#2d2000 55%,#1a1200 100%);flex-direction:column}
+.fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 36px 16px;text-align:center}
+.fc-badge{background:rgba(255,200,50,.15);border:1.5px solid rgba(255,200,50,.4);border-radius:20px;padding:5px 16px;font-size:clamp(10px,1.1vw,13px);font-weight:700;color:#ffd740;letter-spacing:1.5px;text-transform:uppercase}
+.fc-topic{font-size:clamp(28px,5.5vw,68px);font-weight:900;color:#fff;line-height:1.1;max-width:800px}
+.fc-questions{display:flex;flex-direction:column;gap:9px;margin-top:4px;width:100%;max-width:600px}
+.fc-q{background:rgba(255,255,255,.07);border-radius:12px;padding:12px 20px;font-size:clamp(13px,1.6vw,18px);color:rgba(255,255,255,.85);font-weight:500;text-align:left;border-left:4px solid #ffd740}
+.fc-note{font-size:clamp(10px,1.1vw,13px);color:rgba(255,255,255,.35);margin-top:4px;line-height:1.6}
+.fc-teacher{background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.2);border-radius:12px;padding:10px 20px;font-size:clamp(10px,1.15vw,13px);color:rgba(255,200,50,.7);width:100%;max-width:600px;text-align:left;line-height:1.7}
+.fc-teacher strong{color:#ffd740}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="progress"></div>
+  <div id="slides"></div>
+  <nav id="nav">
+    <button id="btn-prev" onclick="move(-1)">◀ Prev</button>
+    <span id="counter"></span>
+    <button id="btn-next" onclick="move(1)">Next ▶</button>
+    <button onclick="toggleFS()">⛶ Fullscreen</button>
+  </nav>
+</div>
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const PH = [
+  {
+    sym:'m', disp:'/m/', color:'#E53935', light:'#FFEBEE', dark:'#5d0e0e',
+    name:'Voiced Bilabial Nasal',
+    desc:'Lips press together gently like /b/, but air flows out continuously through the nose while your throat vibrates.',
+    howto:['Press your lips together gently — like /b/, but relaxed','Let air flow out through your nose the whole time','Keep your voice on continuously — feel the buzz in your lips and nose','Hold the sound as long as you like — "mmmmm"'],
+    tip:'Try humming with your mouth closed — that IS /m/! You can feel the vibration in your lips and nose at the same time.',
+    context:'Common spellings: <b>m</b> (man, summer), <b>mm</b> (summer, swimming)',
+    ex:[{w:'man',p:'/mæn/'},{w:'summer',p:'/ˈsʌmər/'},{w:'swim',p:'/swɪm/'},{w:'time',p:'/taɪm/'},{w:'jam',p:'/dʒæm/'}],
+    pair:{s:'/b/',w1:'man',w2:'ban',lbl:'NASAL vs. PLOSIVE'},
+    mouth:{lipOpenness:.03,lipWidth:.55,tongueHeight:.30,tongueBackness:.50,rounded:false},
+    lipd:'Lips: PRESSED TOGETHER (relaxed)',tonged:'Throat & nose: VIBRATING, continuous',
+    place:'Bilabial (lips)',manner:'Nasal (air through the nose)',
+  },
+  {
+    sym:'n', disp:'/n/', color:'#FB8C00', light:'#FFF3E0', dark:'#7a3a00',
+    name:'Voiced Alveolar Nasal',
+    desc:'The tongue tip touches the ridge behind the top teeth like /d/, but air flows out continuously through the nose.',
+    howto:['Press your tongue tip against the ridge behind your top front teeth — like /d/','Let air flow out through your nose continuously','Keep your voice buzzing the whole time','Hold the sound — "nnnnn"'],
+    tip:'Compare /n/ "no" and /d/ "doe" — same tongue position, but for /n/ the air keeps flowing out through your nose.',
+    context:'Common spellings: <b>n</b> (no, sun), <b>nn</b> (dinner, sunny)',
+    ex:[{w:'no',p:'/nəʊ/'},{w:'sun',p:'/sʌn/'},{w:'dinner',p:'/ˈdɪnər/'},{w:'ten',p:'/ten/'},{w:'nine',p:'/naɪn/'}],
+    pair:{s:'/ŋ/',w1:'sun',w2:'sung',lbl:'ALVEOLAR vs. VELAR NASAL'},
+    mouth:{lipOpenness:.22,lipWidth:.60,tongueHeight:.85,tongueBackness:.18,rounded:false},
+    lipd:'Lips: SLIGHTLY OPEN',tonged:'Tongue tip: UP at ridge, air through nose',
+    place:'Alveolar (tongue tip + ridge)',manner:'Nasal (air through the nose)',
+  },
+  {
+    sym:'ŋ', disp:'/ŋ/', color:'#F9A825', light:'#FFFDE7', dark:'#7a5800',
+    name:'Voiced Velar Nasal',
+    desc:'The back of the tongue touches the soft palate like /g/, but air flows out continuously through the nose — this sound never starts an English word.',
+    howto:['Raise the back of your tongue to touch the soft palate — like /g/','Let air flow out through your nose continuously','Keep your voice buzzing — do NOT add a /g/ sound after it','Remember: this sound only appears in the middle or end of a word'],
+    tip:'⚠️ Japanese speakers often add an extra /g/: "sing" → "singu". Stop cleanly as soon as the nasal sound ends — no extra vowel!',
+    context:'Common spelling: <b>ng</b> (sing, long, finger), <b>n</b> before k (thank, think)',
+    ex:[{w:'sing',p:'/sɪŋ/'},{w:'ring',p:'/rɪŋ/'},{w:'finger',p:'/ˈfɪŋɡər/'},{w:'long',p:'/lɒŋ/'},{w:'thank',p:'/θæŋk/'}],
+    pair:{s:'/n/',w1:'sing',w2:'sin',lbl:'VELAR vs. ALVEOLAR NASAL'},
+    mouth:{lipOpenness:.28,lipWidth:.55,tongueHeight:.85,tongueBackness:.85,rounded:false},
+    lipd:'Lips: OPEN',tonged:'Tongue back: UP at soft palate, air through nose',
+    place:'Velar (tongue back + soft palate)',manner:'Nasal (air through the nose)',
+  },
+  {
+    sym:'l', disp:'/l/', color:'#43A047', light:'#E8F5E9', dark:'#1b5e20',
+    name:'Voiced Alveolar Lateral Approximant',
+    desc:'The tongue tip touches the ridge behind the top teeth, but air flows around BOTH SIDES of the tongue, not through the nose.',
+    howto:['Touch your tongue tip to the ridge behind your top front teeth','Let air flow around both sides of your tongue','Keep your voice on — feel the buzz','Keep your tongue tip UP for the whole sound'],
+    tip:'Japanese ら/り/る uses a quick tongue FLAP. English /l/ HOLDS the tongue tip up against the ridge the whole time — try holding "llll" steady.',
+    context:'Common spellings: <b>l</b> (light, feel), <b>ll</b> (yellow, hello)',
+    ex:[{w:'light',p:'/laɪt/'},{w:'milk',p:'/mɪlk/'},{w:'feel',p:'/fiːl/'},{w:'yellow',p:'/ˈjeləʊ/'},{w:'love',p:'/lʌv/'}],
+    pair:{s:'/r/',w1:'light',w2:'right',lbl:'OFTEN CONFUSED — DIFFERENT TONGUE SHAPES'},
+    mouth:{lipOpenness:.30,lipWidth:.55,tongueHeight:.75,tongueBackness:.20,rounded:false},
+    lipd:'Lips: OPEN, relaxed',tonged:'Tongue tip: UP at ridge, air flows around sides',
+    place:'Alveolar (tongue tip + ridge)',manner:'Lateral Approximant (air flows around the tongue)',
+  },
+  {
+    sym:'r', disp:'/r/', color:'#00ACC1', light:'#E0F7FA', dark:'#006064',
+    name:'Voiced Postalveolar Approximant',
+    desc:'The tongue curls back slightly WITHOUT touching the roof of the mouth, and the lips often round a little.',
+    howto:['Curl the tip of your tongue back slightly — but do NOT let it touch the roof of your mouth','Round your lips a little, like starting to say "oo"','Keep your voice on — a smooth, continuous sound','Glide smoothly into the next vowel'],
+    tip:'⚠️ One of the hardest sounds for Japanese speakers! Unlike Japanese ら, the tongue touches NOTHING. Try saying "er" while curling your tongue back without touching anywhere.',
+    context:'Common spelling: <b>r</b> (red, very, sorry) — often silent before a consonant (car, hard) in British English',
+    ex:[{w:'red',p:'/red/'},{w:'car',p:'/kɑːr/'},{w:'very',p:'/ˈveri/'},{w:'sorry',p:'/ˈsɒri/'},{w:'right',p:'/raɪt/'}],
+    pair:{s:'/l/',w1:'right',w2:'light',lbl:'OFTEN CONFUSED — DIFFERENT TONGUE SHAPES'},
+    mouth:{lipOpenness:.28,lipWidth:.45,tongueHeight:.55,tongueBackness:.55,rounded:true},
+    lipd:'Lips: SLIGHTLY ROUNDED',tonged:'Tongue: CURLED BACK, touching NOTHING',
+    place:'Postalveolar (tongue curled back)',manner:'Approximant (no contact, smooth glide)',
+  },
+  {
+    sym:'w', disp:'/w/', color:'#5C6BC0', light:'#E8EAF6', dark:'#1a237e',
+    name:'Voiced Labial-Velar Approximant',
+    desc:'The lips round tightly into a small circle, and the back of the tongue rises toward the soft palate — then glides quickly into the next vowel.',
+    howto:['Round your lips tightly into a small circle — like blowing a kiss','Raise the back of your tongue toward the soft palate at the same time','Turn on your voice','Glide quickly from this position into the next vowel — don\'t hold it'],
+    tip:'Think of blowing out a candle, then immediately saying the next vowel. For "water" — round your lips first, then release into the "aw" sound.',
+    context:'Common spelling: <b>w</b> (water, we, away) — sometimes silent (write, who)',
+    ex:[{w:'water',p:'/ˈwɔːtər/'},{w:'we',p:'/wiː/'},{w:'away',p:'/əˈweɪ/'},{w:'swim',p:'/swɪm/'},{w:'well',p:'/wel/'}],
+    pair:{s:'/v/',w1:'west',w2:'vest',lbl:'OFTEN CONFUSED — ROUNDED LIPS vs. TEETH ON LIP'},
+    mouth:{lipOpenness:.15,lipWidth:.28,tongueHeight:.65,tongueBackness:.80,rounded:true},
+    lipd:'Lips: TIGHTLY ROUNDED',tonged:'Tongue back: RAISED toward soft palate',
+    place:'Labial-Velar (lips + tongue back)',manner:'Approximant (glide into the vowel)',
+  },
+  {
+    sym:'j', disp:'/j/', color:'#AB47BC', light:'#F3E5F5', dark:'#4a0072',
+    name:'Voiced Palatal Approximant',
+    desc:'The front of the tongue rises close to the roof of the mouth — like starting to say /iː/ — then glides quickly into the next vowel.',
+    howto:['Raise the front of your tongue close to the roof of your mouth — like starting to say "ee"','Spread your lips slightly','Turn on your voice','Glide quickly into the next vowel — don\'t hold this position'],
+    tip:'Compare "yet" /jet/ and "jet" /dʒet/ — /j/ is a quick glide with NO contact, while /dʒ/ starts with the tongue touching and a buzzing burst.',
+    context:'Common spelling: <b>y</b> (yes, yellow, year), sometimes <b>u</b> (beautiful), <b>eu</b> (Europe)',
+    ex:[{w:'yes',p:'/jes/'},{w:'you',p:'/juː/'},{w:'yellow',p:'/ˈjeləʊ/'},{w:'year',p:'/jɪər/'},{w:'beyond',p:'/bɪˈjɒnd/'}],
+    pair:{s:'/dʒ/',w1:'yet',w2:'jet',lbl:'OFTEN CONFUSED — GLIDE vs. AFFRICATE'},
+    mouth:{lipOpenness:.18,lipWidth:.62,tongueHeight:.85,tongueBackness:.15,rounded:false},
+    lipd:'Lips: SPREAD',tonged:'Tongue front: HIGH, close to roof, no contact',
+    place:'Palatal (tongue front + hard palate)',manner:'Approximant (glide into the vowel)',
+  },
+];
+
+const QUIZ = [
+  {
+    q:'Which sound is made with air flowing through the NOSE?',
+    opts:['/l/','/m/','/r/','/w/'],
+    ans:1,
+    hint:'/m/ is a NASAL sound — your lips close, but air flows out through your nose the whole time. Try humming!'
+  },
+  {
+    q:'Which word ENDS with the /ŋ/ sound (not /n/)?',
+    opts:['sun','sin','sing','son'],
+    ans:2,
+    hint:'/ŋ/ — back of the tongue touches the soft palate, air through the nose. "sing" = /sɪŋ/. Don\'t add an extra /g/!'
+  },
+  {
+    q:'Which word contains /r/ (tongue curled back, NOT touching anywhere)?',
+    opts:['light','less','right','lamp'],
+    ans:2,
+    hint:'/r/ — the tongue curls back but touches NOTHING. "right" = /raɪt/. Compare with /l/, where the tongue tip touches the ridge.'
+  },
+  {
+    q:'Which word starts with /j/ (a quick glide, not /dʒ/)?',
+    opts:['jet','yet','gem','said'],
+    ans:1,
+    hint:'/j/ — tongue rises close to the roof, then glides — no contact, no buzz-burst. "yet" = /jet/. Compare with "jet" /dʒet/.'
+  },
+];
+
+const DRILL_WORDS = [
+  {w:'man',s:'/m/',c:'#E53935'},{w:'time',s:'/m/',c:'#E53935'},
+  {w:'no',s:'/n/',c:'#FB8C00'},{w:'sun',s:'/n/',c:'#FB8C00'},
+  {w:'sing',s:'/ŋ/',c:'#F9A825'},{w:'long',s:'/ŋ/',c:'#F9A825'},
+  {w:'light',s:'/l/',c:'#43A047'},{w:'feel',s:'/l/',c:'#43A047'},
+  {w:'red',s:'/r/',c:'#00ACC1'},{w:'very',s:'/r/',c:'#00ACC1'},
+  {w:'water',s:'/w/',c:'#5C6BC0'},{w:'swim',s:'/w/',c:'#5C6BC0'},
+  {w:'yes',s:'/j/',c:'#AB47BC'},{w:'year',s:'/j/',c:'#AB47BC'},
+];
+
+// ═══════════════════════════════════════════
+//  MOUTH SVG
+// ═══════════════════════════════════════════
+function mSVG(m,w=188,h=120){
+  const cx=w/2,fCy=h*.52,mCy=h*.60;
+  const hW=(w*.13)+(w*.38-w*.13)*m.lipWidth;
+  const op=m.lipOpenness*h*.30;
+  const uY=mCy-op/2,lY=mCy+op/2,lx=cx-hW,rx=cx+hW;
+  let uP;
+  if(m.rounded){uP=`M ${lx},${uY} Q ${cx},${uY-hW*.12} ${rx},${uY}`;}
+  else{const bH=hW*.20,dH=hW*.08;uP=`M ${lx},${uY} C ${lx+hW*.28},${uY-bH} ${cx-hW*.14},${uY-dH} ${cx},${uY-dH*.4} C ${cx+hW*.14},${uY-dH} ${rx-hW*.28},${uY-bH} ${rx},${uY}`;}
+  const lC2=hW*.26,lP=`M ${lx},${lY} Q ${cx},${lY+lC2} ${rx},${lY}`;
+  const fP=`${uP} L ${rx},${lY} Q ${cx},${lY+lC2} ${lx},${lY} Z`,LC='#C05060';
+  let th='',tg='';
+  if(m.lipOpenness>=.13){const t=op*.85;th=`<rect x="${lx+2}" y="${uY+1}" width="${hW*2-4}" height="${t}" rx="3" fill="white" opacity=".95"/><line x1="${lx+2}" y1="${uY+t*.45}" x2="${rx-2}" y2="${uY+t*.45}" stroke="#ddd" stroke-width=".5"/>`;}
+  if(m.lipOpenness>.28){const tW=Math.min(hW*1.4,hW*2-6),tY=lY-op*(.18+m.tongueHeight*.18),tRy=op*.28;tg=`<ellipse cx="${cx}" cy="${tY}" rx="${tW/2}" ry="${tRy}" fill="#E08080" opacity=".82"/>`;}
+  const nCy=mCy-h*.25;
+  const ns=`<ellipse cx="${cx-5}" cy="${nCy}" rx="3.5" ry="2.5" fill="#E0AA80" opacity=".55"/><ellipse cx="${cx+5}" cy="${nCy}" rx="3.5" ry="2.5" fill="#E0AA80" opacity=".55"/><path d="M ${cx-5},${nCy-1} Q ${cx},${nCy-6} ${cx+5},${nCy-1}" fill="none" stroke="#E0AA80" stroke-width="1.4" opacity=".35"/>`;
+  const co=m.lipOpenness>.02?`<line x1="${lx}" y1="${uY}" x2="${lx}" y2="${lY}" stroke="${LC}" stroke-width="2" stroke-linecap="round"/><line x1="${rx}" y1="${uY}" x2="${rx}" y2="${lY}" stroke="${LC}" stroke-width="2" stroke-linecap="round"/>`:'';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><ellipse cx="${cx}" cy="${fCy}" rx="${w*.44}" ry="${h*.44}" fill="#FFE4C4" stroke="#F4C89E" stroke-width="2"/>${ns}${th}${tg}<path d="${fP}" fill="${LC}" opacity="${m.lipOpenness<.05?.28:.13}"/>${co}<path d="${uP}" fill="none" stroke="${LC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="${lP}" fill="none" stroke="${LC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+// ═══════════════════════════════════════════
+//  BUILDERS
+// ═══════════════════════════════════════════
+
+function titleHTML(){
+  return `<div class="slide title-slide">
+  <div style="max-width:800px;padding:18px">
+    <div style="font-size:clamp(11px,1.3vw,14px);color:#26c6da;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px">English Pronunciation Lesson</div>
+    <h1><em>Nasal &amp; Approximant</em> Consonants（鼻音・接近音）</h1>
+    <p class="title-sub">7 sounds that flow smoothly — through your nose, or with no contact at all!</p>
+    <div class="goal-box">
+      <p>🎯 <strong>Today's Goal:</strong> Produce all 7 nasal and approximant consonants（子音）with smooth, continuous voicing</p>
+      <p style="margin-top:4px">⏱ 45 minutes &nbsp;·&nbsp; 22 slides &nbsp;·&nbsp; Use ◀ ▶ or arrow keys to navigate</p>
+    </div>
+    <div class="sym-strip">${PH.map(p=>`<div class="sc">${p.disp}</div>`).join('')}</div>
+    <p style="color:rgba(255,255,255,.3);font-size:11px;margin-top:18px">Teacher demonstrates each sound — students repeat</p>
+  </div></div>`;
+}
+
+function overviewHTML(){
+  const cards=PH.map(p=>`
+    <div class="ov-card" style="background:${p.light}">
+      <div class="ov-sym" style="color:${p.color}">${p.sym}</div>
+      <div class="ov-disp" style="color:${p.color}">${p.disp}</div>
+      ${mSVG(p.mouth,84,54)}
+      <div class="ov-name" style="color:${p.dark}">${p.manner.split(' ')[0]}</div>
+      <div class="ov-word" style="color:${p.color}">${p.ex[0].w}</div>
+    </div>`).join('');
+  return `<div class="slide" style="background:#e0f7fa;flex-direction:column">
+  <div class="s-head" style="background:#00363a">Today's 7 Nasal &amp; Approximant Consonants <span class="badge">Overview</span></div>
+  <div class="s-body" style="flex-direction:column;align-items:center;justify-content:center;gap:12px">
+    <div style="background:#fff;border-radius:12px;padding:10px 20px;font-size:clamp(11px,1.3vw,15px);color:#00363a;font-weight:600;text-align:center;width:100%;max-width:980px">
+      🎵 All of these sounds are VOICED and flow SMOOTHLY — nasals (/m/ /n/ /ŋ/) send air through your nose; approximants (/l/ /r/ /w/ /j/) glide with no full contact!
+    </div>
+    <div class="ov-grid" style="max-width:980px;width:100%">${cards}</div>
+    <p style="color:#999;font-size:11px">Each consonant keeps its colour throughout this lesson</p>
+  </div></div>`;
+}
+
+function explainHTML(p,idx){
+  const words=p.ex.map(e=>`
+    <div class="ex-chip" style="background:${p.light};border:1.5px solid ${p.color}22">
+      <div class="ew" style="color:${p.dark}">${e.w}</div>
+      <div class="ei">${e.p}</div>
+    </div>`).join('');
+  return `<div class="slide explain-slide">
+  <div class="s-head" style="background:${p.color}">${p.disp} — ${p.name} <span class="badge">${idx} / ${PH.length}</span></div>
+  <div class="s-body">
+    <div class="ex-left">
+      <div class="big-sym" style="color:${p.color}">${p.sym}</div>
+      <div class="mouth-wrap">${mSVG(p.mouth,166,106)}</div>
+      <div class="lip-lbl"><span style="color:${p.color};font-weight:700">${p.lipd}</span><br>${p.tonged}</div>
+    </div>
+    <div class="ex-right">
+      <div class="feat-box">
+        <div class="feat-item"><div class="fv" style="color:${p.color}">${p.place}</div><div class="fl">Place</div></div>
+        <div class="feat-item"><div class="fv" style="color:${p.color}">${p.manner}</div><div class="fl">Manner</div></div>
+        <div class="feat-throat"><strong>Throat check:</strong> Put your hand on your throat — you should feel <strong>BUZZING / VIBRATION</strong> the whole time. This sound flows smoothly — never stop it abruptly!</div>
+      </div>
+      <div class="desc-card" style="background:${p.light}">
+        <div class="label">How to say it</div>
+        <p>${p.desc}</p>
+        <ul class="howto">${p.howto.map(h=>`<li>${h}</li>`).join('')}</ul>
+      </div>
+      <div class="tip-box"><div class="tip-icon">💡</div><div class="tip-text">${p.tip}</div></div>
+      <div>
+        <div class="label">Example words</div>
+        <div class="ex-words">${words}</div>
+      </div>
+      <div class="ctx" style="background:${p.light}"><span style="color:${p.color};font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:1px">Spellings: </span>${p.context}</div>
+    </div>
+  </div></div>`;
+}
+
+function drillHTML(p,idx){
+  const rows=p.ex.slice(0,3).map((e,i)=>`
+    <div class="wr" style="border-left:4px solid ${p.color}">
+      <div class="wr-n" style="background:${p.color}">${i+1}</div>
+      <div class="wr-w" style="color:${p.dark}">${e.w}</div>
+      <div class="wr-p">${e.p}</div>
+    </div>`).join('');
+  const pairSec=`<div class="mp-box" style="background:${p.light};border:1.5px solid ${p.color}22">
+      <div class="label">Minimal Pair — ${p.pair.lbl}</div>
+      <div class="mp-row">
+        <div class="mp-item"><div class="mp-sym">${p.disp}</div><div class="mp-word" style="color:${p.color}">${p.pair.w1}</div></div>
+        <div class="mp-vs">VS</div>
+        <div class="mp-item"><div class="mp-sym">${p.pair.s}</div><div class="mp-word" style="color:#888">${p.pair.w2}</div></div>
+        <div class="mp-note">Teacher says both words. Students listen, then repeat each one.</div>
+      </div>
+    </div>`;
+  return `<div class="slide drill-slide">
+  <div class="s-head" style="background:#00363a">Repeat After Me — ${p.disp} <span class="badge" style="background:rgba(255,255,255,.14)">Drill ${idx}</span></div>
+  <div class="s-body">
+    <div class="dr-left">
+      <div class="dr-sym" style="color:${p.color}">${p.sym}</div>
+      <div style="font-size:clamp(11px,1.3vw,15px);color:#555;text-align:center">${p.disp}</div>
+      ${mSVG(p.mouth,154,98)}
+      <div style="font-size:10px;color:#777;text-align:center;line-height:1.6">${p.lipd}<br>${p.tonged}</div>
+    </div>
+    <div class="dr-right">
+      <div>
+        <div class="repeat-instr" style="background:${p.light};border:1.5px solid ${p.color}30">
+          <div class="ri-label" style="color:${p.color}">Drill flow</div>
+          <div class="ri-flow">
+            <div class="ri-step" style="background:${p.color};color:#fff">Teacher says</div>
+            <div class="ri-arrow">→</div>
+            <div class="ri-step" style="background:#e0f7fa;color:#00363a">Whole class repeats</div>
+            <div class="ri-arrow">→</div>
+            <div class="ri-step" style="background:#f3e5f5;color:#4a0072">Individual student</div>
+          </div>
+        </div>
+        <div class="word-rows">${rows}</div>
+      </div>
+      ${pairSec}
+    </div>
+  </div></div>`;
+}
+
+function stdDrillHTML(){
+  const cards=DRILL_WORDS.map(pw=>`
+    <div class="wg">
+      <div class="wg-w" style="color:${pw.c}">${pw.w}</div>
+      <div class="wg-sym" style="color:${pw.c}">${pw.s}</div>
+    </div>`).join('');
+  return `<div class="slide stdrill-slide">
+  <div class="s-head" style="background:#00363a">Student Drill — Now You Try! <span class="badge" style="background:rgba(255,255,255,.14)">Speaking Practice</span></div>
+  <div class="s-body" style="flex-direction:column;gap:11px">
+    <div class="sd-instr">
+      <h2>🎤 Teacher-led pronunciation drill</h2>
+      <div class="flow-steps">
+        <div class="fs"><span class="fs-n">1</span><span>Teacher points to a word on screen and says it clearly</span></div>
+        <div class="fs"><span class="fs-n">2</span><span>Students repeat as a class — check for vibration and smooth flow</span></div>
+        <div class="fs"><span class="fs-n">3</span><span>Teacher calls on individual students to repeat alone</span></div>
+        <div class="fs"><span class="fs-n">4</span><span>Teacher gives feedback: "Feel the buzz!" / "Let it flow smoothly!"</span></div>
+      </div>
+    </div>
+    <div class="word-grid">${cards}</div>
+    <p style="color:#aaa;font-size:11px;text-align:center">Each word shows its consonant symbol — use this for feedback reference</p>
+  </div></div>`;
+}
+
+function feedbackHTML(){
+  return `<div class="slide fb-slide">
+  <div class="s-head" style="background:#00263a">Feedback Guide — Common Student Errors <span class="badge" style="background:rgba(255,255,255,.14)">Teacher Reference</span></div>
+  <div class="s-body" style="flex-direction:column;gap:11px">
+    <div class="fb-grid">
+      <div class="fb-card">
+        <h3 style="color:#FB8C00">⚠️ /m/ /n/ /ŋ/ — Most common mistakes</h3>
+        <ul class="fb-list">
+          <li>Stopping the sound too abruptly → remind: "Let it flow — hold the hum!"</li>
+          <li>/ŋ/ followed by an extra /g/ → compare <span class="fb-pair">sing /sɪŋ/</span> vs <span class="fb-pair">sing-g /sɪŋɡ/</span> (incorrect)</li>
+          <li>/n/ and /ŋ/ confused → compare <span class="fb-pair">sun /n/</span> vs <span class="fb-pair">sung /ŋ/</span></li>
+          <li>Tip: Pinch the nose while saying /m/ /n/ /ŋ/ — the sound should change or stop, proving air goes through the nose</li>
+        </ul>
+      </div>
+      <div class="fb-card">
+        <h3 style="color:#43A047">⚠️ /l/ and /r/ — Most common mistakes</h3>
+        <ul class="fb-list">
+          <li>/l/ and /r/ confused → compare <span class="fb-pair">light /l/</span> vs <span class="fb-pair">right /r/</span></li>
+          <li>For /l/: tongue tip not touching the ridge → "Touch and hold, like saying 'la'"</li>
+          <li>For /r/: tongue touching somewhere → "Curl back but touch NOTHING — like a cat's tongue"</li>
+          <li>Tip: Practice alternating "la-ra-la-ra" slowly, exaggerating the tongue movement each time</li>
+        </ul>
+      </div>
+      <div class="fb-card">
+        <h3 style="color:#5C6BC0">⚠️ /w/ and /j/ — Most common mistakes</h3>
+        <ul class="fb-list">
+          <li>/w/ with lips not rounded enough → remind: "Tight circle, like blowing a kiss!"</li>
+          <li>/w/ confused with /v/ → compare <span class="fb-pair">west /w/</span> vs <span class="fb-pair">vest /v/</span></li>
+          <li>/j/ confused with /dʒ/ → compare <span class="fb-pair">yet /j/</span> vs <span class="fb-pair">jet /dʒ/</span></li>
+          <li>Tip: Both /w/ and /j/ are GLIDES — don't hold them, glide quickly into the vowel</li>
+        </ul>
+      </div>
+      <div class="fb-card">
+        <h3 style="color:#00363a">✅ Positive feedback phrases</h3>
+        <ul class="fb-list">
+          <li>"Great — I could feel that hum continue smoothly!"</li>
+          <li>"Perfect — your tongue touched nothing for that /r/!"</li>
+          <li>"Nice glide — that /w/ flowed right into the vowel."</li>
+          <li>"Listen to the difference: <em>light</em> vs <em>right</em> — can you hear (and feel) it?"</li>
+          <li>"That /ŋ/ had no extra /g/ — exactly right!"</li>
+        </ul>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function quizQHTML(){
+  const qs=QUIZ.map((q,i)=>`
+    <div class="q-box">
+      <div class="q-num">Question ${i+1} of ${QUIZ.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map(o=>`<div class="q-opt">${o}</div>`).join('')}</div>
+    </div>`).join('');
+  return `<div class="slide quizq-slide">
+  <div class="s-head" style="background:#00363a">Mini Quiz — Questions <span class="badge" style="background:rgba(255,255,255,.14)">Think first!</span></div>
+  <div class="s-body" style="flex-direction:column;justify-content:space-evenly;gap:10px">
+    <div class="think-banner">🤔 Read each question — think about your answer before the next slide!</div>
+    <div class="q-grid">${qs}</div>
+  </div></div>`;
+}
+
+function quizAHTML(){
+  const qs=QUIZ.map((q,i)=>`
+    <div class="qa-box">
+      <div class="q-num">Question ${i+1} — Answer</div>
+      <div class="q-text" style="margin-bottom:8px">${q.q}</div>
+      <div class="q-opts" style="margin-bottom:7px">${q.opts.map((o,ci)=>`<div class="qa-opt${ci===q.ans?' correct':''}">${o}</div>`).join('')}</div>
+      <div class="qa-hint">💡 ${q.hint}</div>
+    </div>`).join('');
+  return `<div class="slide quiza-slide">
+  <div class="s-head" style="background:#1e5f3a">Mini Quiz — Answers <span class="badge" style="background:rgba(255,255,255,.14)">How did you do?</span></div>
+  <div class="s-body" style="flex-direction:column;justify-content:space-evenly;gap:10px">
+    <div class="q-grid">${qs}</div>
+  </div></div>`;
+}
+
+function summaryHTML(){
+  return `<div class="slide summary-slide">
+  <div class="s-head" style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.09)">
+    <span style="color:#fff">Summary — Nasal &amp; Approximant Consonants（鼻音・接近音）</span>
+    <span class="badge" style="background:rgba(255,255,255,.1);color:#80cbc4">Lesson Complete 🎉</span>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+    <p style="color:rgba(255,255,255,.5);font-size:clamp(12px,1.35vw,16px);margin-bottom:14px">All 7 nasal &amp; approximant consonants — smooth and continuous!</p>
+    <div class="sum-grid">${PH.map(p=>`
+      <div class="sum-card" style="background:${p.color}">
+        <div class="sc-sym">${p.sym}</div>
+        <div class="sc-disp">${p.disp}</div>
+        <div class="sc-ws">${p.ex.slice(0,3).map(e=>e.w).join(' · ')}</div>
+      </div>`).join('')}</div>
+    <div class="sum-foot">
+      <p>Key rule: <strong>Nasals = air through the nose; Approximants = smooth glide, no full contact!</strong> 🎵</p>
+      <div class="nxt-box">
+        <p>🎉 <strong>Course Complete!</strong> You've now studied all 44 English sounds across 6 lessons.</p>
+        <p style="margin-top:3px">Keep practicing every day — your ear and mouth will keep improving with use!</p>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function freeConvHTML(){
+  return `<div class="slide freeconv-slide">
+  <div class="s-head" style="background:#2d1f00;border-top:2px solid rgba(255,200,50,.25)">
+    <span style="color:#ffd740">💬 Free Conversation</span>
+    <span class="badge" style="background:rgba(255,200,50,.18);color:#ffd740">1–3 min each</span>
+  </div>
+  <div class="fc-body">
+    <div class="fc-badge">Today's Topic</div>
+    <div class="fc-topic">Bucket List</div>
+    <div class="fc-questions">
+      <div class="fc-q">📝 What are 3 things on your bucket list?</div>
+      <div class="fc-q">⭐ Which one is the most important to you, and why?</div>
+      <div class="fc-q">⏰ When do you hope to do it?</div>
+    </div>
+    <p class="fc-note">The topic doesn't need to relate to today's pronunciation theme — just have a natural conversation!</p>
+    <div class="fc-teacher">
+      <strong>Teacher guide:</strong> Talk with each student individually for 1–3 minutes.<br>
+      Correct pronunciation naturally — don't interrupt the conversation flow.<br>
+      Use follow-up questions to keep the conversation going.
+    </div>
+  </div></div>`;
+}
+
+// ═══════════════════════════════════════════
+//  BUILD
+// ═══════════════════════════════════════════
+function build(){
+  const c=document.getElementById('slides');
+  let h=titleHTML()+overviewHTML();
+  PH.forEach((p,i)=>{h+=explainHTML(p,i+1);h+=drillHTML(p,i+1);});
+  h+=stdDrillHTML()+feedbackHTML()+quizQHTML()+quizAHTML()+summaryHTML()+freeConvHTML();
+  c.innerHTML=h;
+}
+
+let cur=0,SL=[];
+function updateUI(){
+  SL.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  document.getElementById('counter').textContent=`${cur+1} / ${SL.length}`;
+  document.getElementById('progress').style.width=`${(cur+1)/SL.length*100}%`;
+  document.getElementById('btn-prev').disabled=cur===0;
+  document.getElementById('btn-next').disabled=cur===SL.length-1;
+}
+function move(d){const n=Math.max(0,Math.min(SL.length-1,cur+d));if(n!==cur){cur=n;updateUI();}}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')move(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')move(-1);
+});
+function toggleFS(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+build();
+SL=Array.from(document.querySelectorAll('.slide'));
+updateUI();
+</script>
+</body>
+</html>
