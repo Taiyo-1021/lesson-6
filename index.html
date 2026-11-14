@@ -130,9 +130,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#001517;overflow:hidden;
 .q-opt{border-radius:8px;padding:7px 16px;font-size:clamp(12px,1.5vw,16px);font-weight:700;border:2px solid #ddd;background:#f7f7f7;color:#333;cursor:default}
 .think-banner{background:rgba(0,172,193,.1);border:1.5px solid rgba(0,172,193,.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:clamp(13px,1.5vw,17px);color:#00363a;font-weight:600;flex-shrink:0}
 
-/* ── QUIZ A ── */
-.quiza-slide{background:#f0fff4;flex-direction:column}
-.qa-box{background:#fff;border-radius:13px;padding:15px 20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+/* ── QUIZ REVEAL ── */
+.q-reveal-btn{margin-top:6px;padding:6px 18px;background:#00363a;color:#fff;border:none;border-radius:8px;font-size:clamp(11px,1.2vw,14px);font-weight:700;cursor:pointer;transition:background .15s}
+.q-reveal-btn:hover{background:#005f66}
+.q-ans-reveal{display:none;margin-top:8px}
+.q-ans-reveal.open{display:block}
 .qa-opt{border-radius:8px;padding:7px 16px;font-size:clamp(12px,1.5vw,16px);font-weight:700;border:2px solid #ddd;background:#f7f7f7;color:#999;cursor:default}
 .qa-opt.correct{background:#e8f5e9;border-color:#2e7d52;color:#1a5c35}
 .qa-opt.correct::after{content:' ✓';font-weight:900}
@@ -342,7 +344,7 @@ function titleHTML(){
   return `<div class="slide title-slide">
   <div style="max-width:800px;padding:18px">
     <div style="font-size:clamp(11px,1.3vw,14px);color:#26c6da;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px">English Pronunciation Lesson</div>
-    <h1><em>Nasal &amp; Approximant</em> Consonants（鼻音・接近音）</h1>
+    <h1><em>Nasal &amp; Approximant</em> Consonants<span style="white-space:nowrap">（鼻音・接近音）</span></h1>
     <p class="title-sub">7 sounds that flow smoothly — through your nose, or with no contact at all!</p>
     <div class="goal-box">
       <p>🎯 <strong>Today's Goal:</strong> Produce all 7 nasal and approximant consonants（子音）with smooth, continuous voicing</p>
@@ -477,44 +479,43 @@ function stdDrillHTML(){
 
 function feedbackHTML(){
   return `<div class="slide fb-slide">
-  <div class="s-head" style="background:#00263a">Feedback Guide — Common Student Errors <span class="badge" style="background:rgba(255,255,255,.14)">Teacher Reference</span></div>
-  <div class="s-body" style="flex-direction:column;gap:11px">
+  <div class="s-head" style="background:#00263a">Watch Out! — Common Mistakes with Nasals &amp; Approximants <span class="badge" style="background:rgba(255,255,255,.14)">Common Mistakes</span></div>
+  <div class="s-body" style="flex-direction:column;gap:11px;overflow-y:auto">
     <div class="fb-grid">
       <div class="fb-card">
-        <h3 style="color:#FB8C00">⚠️ /m/ /n/ /ŋ/ — Most common mistakes</h3>
+        <h3 style="color:#FB8C00">⚠️ /m/ /n/ /ŋ/ — Cutting the sound short</h3>
         <ul class="fb-list">
-          <li>Stopping the sound too abruptly → remind: "Let it flow — hold the hum!"</li>
-          <li>/ŋ/ followed by an extra /g/ → compare <span class="fb-pair">sing /sɪŋ/</span> vs <span class="fb-pair">sing-g /sɪŋɡ/</span> (incorrect)</li>
-          <li>/n/ and /ŋ/ confused → compare <span class="fb-pair">sun /n/</span> vs <span class="fb-pair">sung /ŋ/</span></li>
-          <li>Tip: Pinch the nose while saying /m/ /n/ /ŋ/ — the sound should change or stop, proving air goes through the nose</li>
+          <li>Stopping too abruptly? → <strong>hold the hum</strong> — let it flow smoothly out through your nose</li>
+          <li>Adding an extra /g/ after /ŋ/? → compare <span class="fb-pair">sing /sɪŋ/</span> vs <span class="fb-pair">sing-g /sɪŋɡ/</span> — no /g/ after the nasal!</li>
+          <li>Confusing /n/ and /ŋ/? → compare <span class="fb-pair">sun /n/</span> vs <span class="fb-pair">sung /ŋ/</span> — feel where your tongue goes</li>
+          <li>Self-check: pinch your nose while saying /m/ /n/ /ŋ/ — the sound should change or cut out (air goes through the nose)</li>
         </ul>
       </div>
       <div class="fb-card">
-        <h3 style="color:#43A047">⚠️ /l/ and /r/ — Most common mistakes</h3>
+        <h3 style="color:#43A047">⚠️ /l/ and /r/ — The hardest pair for Japanese speakers</h3>
         <ul class="fb-list">
-          <li>/l/ and /r/ confused → compare <span class="fb-pair">light /l/</span> vs <span class="fb-pair">right /r/</span></li>
-          <li>For /l/: tongue tip not touching the ridge → "Touch and hold, like saying 'la'"</li>
-          <li>For /r/: tongue touching somewhere → "Curl back but touch NOTHING — like a cat's tongue"</li>
-          <li>Tip: Practice alternating "la-ra-la-ra" slowly, exaggerating the tongue movement each time</li>
+          <li>Confusing /l/ and /r/? → compare <span class="fb-pair">light /l/</span> vs <span class="fb-pair">right /r/</span></li>
+          <li>For /l/: your tongue tip must <strong>touch the ridge</strong> behind your top teeth — hold it there briefly</li>
+          <li>For /r/: curl your tongue back but <strong>touch NOTHING</strong> — think of it hovering like a cat's tongue</li>
+          <li>Practice slowly: "la-ra-la-ra" — exaggerate the tongue movement each time until you can feel the difference</li>
         </ul>
       </div>
       <div class="fb-card">
-        <h3 style="color:#5C6BC0">⚠️ /w/ and /j/ — Most common mistakes</h3>
+        <h3 style="color:#5C6BC0">⚠️ /w/ and /j/ — Not gliding fast enough</h3>
         <ul class="fb-list">
-          <li>/w/ with lips not rounded enough → remind: "Tight circle, like blowing a kiss!"</li>
-          <li>/w/ confused with /v/ → compare <span class="fb-pair">west /w/</span> vs <span class="fb-pair">vest /v/</span></li>
-          <li>/j/ confused with /dʒ/ → compare <span class="fb-pair">yet /j/</span> vs <span class="fb-pair">jet /dʒ/</span></li>
-          <li>Tip: Both /w/ and /j/ are GLIDES — don't hold them, glide quickly into the vowel</li>
+          <li>/w/ not sounding right? → make a <strong>tight rounded circle</strong> with your lips — like blowing a kiss — then quickly glide into the vowel</li>
+          <li>Confusing /w/ with /v/? → compare <span class="fb-pair">west /w/</span> vs <span class="fb-pair">vest /v/</span> — /w/ uses only the lips, no teeth</li>
+          <li>Confusing /j/ with /dʒ/? → compare <span class="fb-pair">yet /j/</span> vs <span class="fb-pair">jet /dʒ/</span> — /j/ is a smooth glide, /dʒ/ is a burst</li>
+          <li>Key rule: /w/ and /j/ are GLIDES — <strong>don't hold them</strong>, glide quickly into the vowel that follows</li>
         </ul>
       </div>
       <div class="fb-card">
-        <h3 style="color:#00363a">✅ Positive feedback phrases</h3>
+        <h3 style="color:#00363a">💡 Self-check for all 7 sounds</h3>
         <ul class="fb-list">
-          <li>"Great — I could feel that hum continue smoothly!"</li>
-          <li>"Perfect — your tongue touched nothing for that /r/!"</li>
-          <li>"Nice glide — that /w/ flowed right into the vowel."</li>
-          <li>"Listen to the difference: <em>light</em> vs <em>right</em> — can you hear (and feel) it?"</li>
-          <li>"That /ŋ/ had no extra /g/ — exactly right!"</li>
+          <li>Nasals (/m/ /n/ /ŋ/): pinch your nose — the sound changes = you're doing it right</li>
+          <li>/l/ vs /r/: record yourself saying "light" and "right" — can you hear the difference?</li>
+          <li>/w/: your lips must be <strong>rounded before</strong> you start the sound — not after</li>
+          <li>Minimal pairs: <span class="fb-pair">light/right</span>, <span class="fb-pair">sun/sung</span>, <span class="fb-pair">west/vest</span>, <span class="fb-pair">yet/jet</span></li>
         </ul>
       </div>
     </div>
@@ -522,31 +523,23 @@ function feedbackHTML(){
 }
 
 function quizQHTML(){
-  const qs=QUIZ.map((q,i)=>`
-    <div class="q-box">
+  const qs=QUIZ.map((q,i)=>{
+    const id=`qrev-${i}`;
+    const opts=q.opts.map((o,ci)=>`<div class="q-opt${ci===q.ans?' correct':''}">${o}</div>`).join('');
+    return `<div class="q-box">
       <div class="q-num">Question ${i+1} of ${QUIZ.length}</div>
       <div class="q-text">${q.q}</div>
-      <div class="q-opts">${q.opts.map(o=>`<div class="q-opt">${o}</div>`).join('')}</div>
-    </div>`).join('');
+      <div class="q-opts" style="margin-bottom:7px">${q.opts.map(o=>`<div class="q-opt">${o}</div>`).join('')}</div>
+      <button class="q-reveal-btn" onclick="toggleAns(this,'${id}')">Show Answer</button>
+      <div class="q-ans-reveal" id="${id}">
+        <div class="q-opts" style="margin-bottom:6px">${opts}</div>
+        <div class="qa-hint">💡 ${q.hint}</div>
+      </div>
+    </div>`;
+  }).join('');
   return `<div class="slide quizq-slide">
-  <div class="s-head" style="background:#00363a">Mini Quiz — Questions <span class="badge" style="background:rgba(255,255,255,.14)">Think first!</span></div>
-  <div class="s-body" style="flex-direction:column;justify-content:space-evenly;gap:10px">
-    <div class="think-banner">🤔 Read each question — think about your answer before the next slide!</div>
-    <div class="q-grid">${qs}</div>
-  </div></div>`;
-}
-
-function quizAHTML(){
-  const qs=QUIZ.map((q,i)=>`
-    <div class="qa-box">
-      <div class="q-num">Question ${i+1} — Answer</div>
-      <div class="q-text" style="margin-bottom:8px">${q.q}</div>
-      <div class="q-opts" style="margin-bottom:7px">${q.opts.map((o,ci)=>`<div class="qa-opt${ci===q.ans?' correct':''}">${o}</div>`).join('')}</div>
-      <div class="qa-hint">💡 ${q.hint}</div>
-    </div>`).join('');
-  return `<div class="slide quiza-slide">
-  <div class="s-head" style="background:#1e5f3a">Mini Quiz — Answers <span class="badge" style="background:rgba(255,255,255,.14)">How did you do?</span></div>
-  <div class="s-body" style="flex-direction:column;justify-content:space-evenly;gap:10px">
+  <div class="s-head" style="background:#00363a">Mini Quiz <span class="badge" style="background:rgba(255,255,255,.14)">Check Your Answers</span></div>
+  <div class="s-body" style="flex-direction:column;gap:10px;overflow-y:auto;justify-content:flex-start">
     <div class="q-grid">${qs}</div>
   </div></div>`;
 }
@@ -605,8 +598,14 @@ function build(){
   const c=document.getElementById('slides');
   let h=titleHTML()+overviewHTML();
   PH.forEach((p,i)=>{h+=explainHTML(p,i+1);h+=drillHTML(p,i+1);});
-  h+=stdDrillHTML()+feedbackHTML()+quizQHTML()+quizAHTML()+summaryHTML()+freeConvHTML();
+  h+=stdDrillHTML()+feedbackHTML()+quizQHTML()+summaryHTML()+freeConvHTML();
   c.innerHTML=h;
+}
+
+function toggleAns(btn,id){
+  const el=document.getElementById(id);
+  const open=el.classList.toggle('open');
+  btn.textContent=open?'Hide':'Show Answer';
 }
 
 let cur=0,SL=[];
